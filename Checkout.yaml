@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Tool Rental Application - OpenAPI 3.0
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080/rental
+paths:
+  /checkout:
+    post:
+      tags:
+        - Checkout
+      summary: Checkout a tool
+      description: Checkout a tool
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+        required: true
+      responses:
+        '200':
+          description: Checkout succesful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200Response'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CheckoutRequest:
+      type: object
+      properties:
+        toolCode:
+          type: string
+          example: CHNS
+        rentalDays:
+          type: integer
+          format: int32
+          example: 5
+        discountPercent:
+          type: integer
+          format: int32
+          example: 10
+        checkoutDate:
+          type: string
+          format: date
+          example: 02/29/24
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorList'
+    ErrorList:
+      type: object
+      required:
+        - code
+        - description
+    200Response:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          
+          
